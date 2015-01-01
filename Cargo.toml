@@ -1,0 +1,9 @@
+[package]
+
+name = "crawler"
+version = "0.0.1"
+authors = ["Adam Canady <adam@adamcanady.com>"]
+
+[dependencies.hyper]
+git = "https://github.com/hyperium/hyper.git"
+
