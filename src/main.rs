@@ -5,6 +5,7 @@ extern crate regex;
 extern crate hyper;
 extern crate url;
 extern crate mime;
+extern crate getopts;
 
 use std::sync::{Arc, Mutex};
 use std::vec::Vec;
@@ -16,6 +17,8 @@ use std::io::timer;
 use std::time::duration::Duration;
 use url::{Url, UrlParser};
 use mime::{Mime, TopLevel, SubLevel};
+use getopts::{reqopt, optopt, optflag, getopts, OptGroup, usage};
+use std::os;
 
 // macro_rules! trycontinue(
 //     ($e:expr) => (match $e { Ok(e) => e, Err(e) => continue; })
@@ -116,13 +119,44 @@ fn make_workers(q: &mut Arc<Mutex<Vec<String>>>, s: &mut Arc<Mutex<HashSet<Strin
   }
 }
 
+fn print_usage(program: &str, opts: &[OptGroup]) {
+    let brief = format!("Usage: {} [options]", program);
+    print!("{}", usage(brief.as_slice(), opts));
+}
+
 fn main() {
+  let args: Vec<String> = os::args();
+
+  let program = args[0].clone();
+
+  let opts = &[
+    optopt("o", "", "set output file name", "NAME"),
+    optflag("h", "help", "print this help menu")
+  ];
+
+  let matches = match getopts(args.tail(), opts) {
+    Ok(m) => { m }
+    Err(f) => { panic!(f.to_string()) }
+  };
+
+  if matches.opt_present("h") {
+    print_usage(program.as_slice(), opts);
+    return;
+  }
+
+  let starting_url = if(!matches.free.is_empty()){
+    matches.free[0].as_slice()
+  } else {
+    print_usage(program.as_slice(), opts);
+    return
+  };
+
   let mut q = Arc::new(Mutex::new(Vec::<String>::new()));
   let mut s = Arc::new(Mutex::new(HashSet::<String>::new()));
 
   {
     let mut qq = q.lock();
-    (*qq).push(String::from_str("http://test.com"));
+    (*qq).push(String::from_str(starting_url));
   }
 
   make_workers(&mut q, &mut s);
