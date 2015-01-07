@@ -12,3 +12,4 @@ This project aims to be an easy-to-use, fast web crawler. Initial goals are:
 - Write tests
 - Test performance
 - Fix multithreading waiting and add channels to communicate progress
+- GUI -- maybe conrad?
