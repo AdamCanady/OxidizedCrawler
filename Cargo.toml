@@ -7,3 +7,5 @@ authors = ["Adam Canady <adam@adamcanady.com>"]
 [dependencies.hyper]
 git = "https://github.com/hyperium/hyper.git"
 
+[dependencies.conrod]
+git = "https://github.com/PistonDevelopers/conrod.git"
