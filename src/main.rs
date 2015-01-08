@@ -6,6 +6,7 @@ extern crate hyper;
 extern crate url;
 extern crate mime;
 extern crate getopts;
+extern crate conrod; // get this to work
 
 use std::sync::{Arc, Mutex};
 use std::vec::Vec;
